@@ -40,3 +40,45 @@ def test_len():
     recipe.add_ingredient(Ingredient("Мука", 340, "гр"))
     recipe.add_ingredient(Ingredient("Молоко", 500, "мл"))
     assert len(recipe) == 2
+
+def test_add_recipe():
+    s = ShoppingList()
+    recipe = Recipe("Блины")
+    recipe.add_ingredient(Ingredient("Мука", 500, "г"))
+    s.add_recipe(recipe, 2)
+    assert len(s._items) ==1
+    with pytest.raises(ValueError):
+        s.add_recipe(recipe, 0)
+
+def test_remove_recipe():
+    s = ShoppingList()
+    recipe =Recipe("Блины")
+    recipe.add_ingredient(Ingredient("Мука",500, "г"))
+    s.add_recipe(recipe, 1)
+    s.remove_recipe("Блины")
+    assert len(s._items) ==0
+
+def test_get_list():
+    s = ShoppingList()
+    r1 = Recipe("Блины")
+    r1.add_ingredient(Ingredient("Мука", 500, "г"))
+    r2 = Recipe("Оладушки")
+    r2.add_ingredient(Ingredient("Мука", 300, "г"))
+    r2.add_ingredient(Ingredient("Молоко", 200, "мл"))
+    s.add_recipe(r1,1)
+    s.add_recipe(r2,1)
+    items = s.get_list()
+    assert len(items) == 2
+    assert items[0].name =="Мука"
+    assert items[0].quantity ==800.0
+    assert items[1].name == "Молоко"
+
+def test_add():
+    s1 = ShoppingList()
+    s2 = ShoppingList()
+    r1 = Recipe("Блины")
+    r1.add_ingredient(Ingredient("Мука", 300, "г"))
+    s1.add_recipe(r1,1)
+    s2.add_recipe(r1,2)
+    s3 = s1 +s2
+    assert len(s3._items)== 2
