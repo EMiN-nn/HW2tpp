@@ -42,3 +42,43 @@ class Recipe:
         s = self.title
         for i in self.ingredients: s += "\n" + str(i)
         return s
+
+class ShoppingList:
+    def __init__(self):
+        self.items = []
+
+    def add_recipe(self, recipe, portions):
+        if portions <= 0: raise ValueError("Количество порций должно быть положительным")
+        scaled_recipe = recipe.scale(portions)
+        for ingredient in scaled_recipe.ingredients: self.items.append((ingredient, recipe.title))
+
+    def remove_recipe(self, title):
+        new_items = []
+        for ingredient, recipe_title in self.items:
+            if recipe_title != title: new_items.append((ingredient, recipe_title))
+        self.items = new_items
+
+    def get_list(self):
+        s = {}
+        for ingredient, recipe_title in self.items:
+            key = (ingredient.name, ingredient.unit)
+            if key in s:
+                s[key] += ingredient.quantity
+            else:
+                s[key] = ingredient.quantity
+        shopping_list = []
+        for key in s:
+            name = key[0]
+            unit = key[1]
+            quantity = s[key]
+            shopping_list.append(Ingredient(name, quantity, unit))
+        shopping_list.sort(key=lambda ingredient: ingredient.name)
+        return shopping_list
+
+    def __add__(self, other):
+        new_list = ShoppingList()
+        for ingredient, recipe_title in self.items:
+            new_list.items.append((ingredient, recipe_title))
+        for ingredient, recipe_title in other.items:
+            new_list.items.append((ingredient, recipe_title))
+        return new_list
