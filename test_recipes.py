@@ -69,9 +69,9 @@ def test_get_list():
     s.add_recipe(r2,1)
     items = s.get_list()
     assert len(items) == 2
-    assert items[0].name =="Мука"
-    assert items[0].quantity ==800.0
-    assert items[1].name == "Молоко"
+    assert items[1].name =="Мука"
+    assert items[1].quantity ==800.0
+    assert items[0].name == "Молоко"
 
 def test_add():
     s1 = ShoppingList()
