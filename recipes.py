@@ -82,3 +82,17 @@ class ShoppingList:
         for ingredient, recipe_title in other.items:
             new_list.items.append((ingredient, recipe_title))
         return new_list
+class DietaryRecipe(Recipe):
+    def __init__(self, title, diet_type, ingredients=None):
+        super().__init__(title, ingredients)
+        self.diet_type = diet_type
+    def scale(self, ratio):
+        if type(ratio) not in (int, float) or ratio <= 0:
+            raise ValueError("коэффициент должен быть положительным")
+        new_ingredients = []
+        for ingredient in self.ingredients:
+            new_ingredient = Ingredient(ingredient.name,ingredient.quantity*ratio,ingredient.unit)
+            new_ingredients.append(new_ingredient)
+        return DietaryRecipe(self.title, self.diet_type, new_ingredients)
+    def __str__(self):
+        return f"[{self.diet_type}] " +super().__str__()
