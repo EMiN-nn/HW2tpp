@@ -45,22 +45,22 @@ class Recipe:
 
 class ShoppingList:
     def __init__(self):
-        self.items = []
+        self._items = []
 
     def add_recipe(self, recipe, portions):
         if portions <= 0: raise ValueError("Количество порций должно быть положительным")
         scaled_recipe = recipe.scale(portions)
-        for ingredient in scaled_recipe.ingredients: self.items.append((ingredient, recipe.title))
+        for ingredient in scaled_recipe.ingredients: self._items.append((ingredient, recipe.title))
 
     def remove_recipe(self, title):
         new_items = []
-        for ingredient, recipe_title in self.items:
+        for ingredient, recipe_title in self._items:
             if recipe_title != title: new_items.append((ingredient, recipe_title))
-        self.items = new_items
+        self._items = new_items
 
     def get_list(self):
         s = {}
-        for ingredient, recipe_title in self.items:
+        for ingredient, recipe_title in self._items:
             key = (ingredient.name, ingredient.unit)
             if key in s:
                 s[key] += ingredient.quantity
@@ -77,10 +77,10 @@ class ShoppingList:
 
     def __add__(self, other):
         new_list = ShoppingList()
-        for ingredient, recipe_title in self.items:
-            new_list.items.append((ingredient, recipe_title))
-        for ingredient, recipe_title in other.items:
-            new_list.items.append((ingredient, recipe_title))
+        for ingredient, recipe_title in self._items:
+            new_list._items.append((ingredient, recipe_title))
+        for ingredient, recipe_title in other._items:
+            new_list._items.append((ingredient, recipe_title))
         return new_list
 class DietaryRecipe(Recipe):
     def __init__(self, title, diet_type, ingredients=None):
